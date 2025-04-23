@@ -1,6 +1,7 @@
 // *** This file should be only imported in the runtime adapters with Node.js compatibility. ***
 
 import { readFileSync } from "node:fs";
+import { styleText } from "node:util";
 
 import type { ServerOptions } from "./types.ts";
 
@@ -46,11 +47,9 @@ export function printListening(
   let listeningOn = `➜ Listening on:`;
   let additionalInfo = allInterfaces ? " (all interfaces)" : "";
 
-  if (globalThis.process.stdout?.isTTY) {
-    listeningOn = `\u001B[32m${listeningOn}\u001B[0m`; // ANSI green
-    url = `\u001B[36m${url}\u001B[0m`; // ANSI cyan
-    additionalInfo = `\u001B[2m${additionalInfo}\u001B[0m`; // ANSI dim
-  }
+  listeningOn = styleText("green", listeningOn);
+  url = styleText("cyan", url);
+  additionalInfo = styleText("dim", additionalInfo);
 
   console.log(`  ${listeningOn} ${url}${additionalInfo}`);
 }
